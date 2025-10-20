@@ -1,15 +1,23 @@
 services:
+  # Stable Diffusion WebUI Forge service
+  # Forge is an optimized fork of AUTOMATIC1111's WebUI with better performance
   a1111:
     build:
+      # Build context points to the Forge service directory
       context: ./services/forge
       dockerfile: Dockerfile
     ports:
+      # Map host port (default 7860) to container port 7860
+      # Port can be customized via WEBUI_PORT environment variable
       - "${WEBUI_PORT:-7860}:7860"
+    # Use SIGKILL to ensure immediate termination
     stop_signal: SIGKILL
     deploy:
       resources:
         reservations:
           devices:
+            # Reserve NVIDIA GPU for the container
+            # Uses GPU 0 with compute and utility capabilities
             - driver: nvidia
               device_ids: ["0"]
               capabilities: [compute, utility]
