@@ -1,0 +1,17 @@
+services:
+  a1111:
+    build:
+      context: ./services/AUTOMATIC1111
+      dockerfile: Dockerfile
+    ports:
+      - "${WEBUI_PORT:-7860}:7860"
+    stop_signal: SIGKILL
+    environment:
+      - CLI_ARGS=--xformers
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [compute, utility]
