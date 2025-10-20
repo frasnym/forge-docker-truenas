@@ -1,2 +1,2 @@
 include:
-  - /mnt/Tank/apps/forge/compose.yaml
+  - /mnt/Tank/apps/forge-sd/compose.yaml
