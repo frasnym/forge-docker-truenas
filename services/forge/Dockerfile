@@ -1,3 +1,10 @@
+FROM alpine/git:2.36.2 as download
+
+COPY clone.sh /clone.sh
+
+RUN . /clone.sh BLIP https://github.com/salesforce/BLIP.git
+RUN . /clone.sh huggingface_guess https://github.com/lllyasviel/huggingface_guess.git
+
 FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
 
 ENV DEBIAN_FRONTEND=noninteractive PIP_PREFER_BINARY=1
@@ -14,6 +21,8 @@ RUN git clone https://github.com/lllyasviel/stable-diffusion-webui-forge.git && 
     pip install -r requirements_versions.txt
 
 ENV ROOT=/stable-diffusion-webui-forge
+
+COPY --from=download /repositories/ ${ROOT}/repositories/
 
 WORKDIR ${ROOT}
 ENV NVIDIA_VISIBLE_DEVICES=all
